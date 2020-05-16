@@ -8,7 +8,6 @@ def create_grid(cells_in_dimension):
     """Returns a 2d list (lists stored in a list) filled with 1s or 0s.
 
     If 'running' variable is set to true, approximately half the elements will be assigned to 0, the others to 1 (random() returns a float between 0.0 and 1.0, we multiply it by 10 and compare it to 5))
-
     If 'running' is set to false, all elements will be 0
 
     Keyword arguments:
@@ -27,8 +26,6 @@ def display_cells():
     """Draws a rectangle on the screen for each element in our 2D list 'cells'.
     The color of the rectangle is determined by the value of the element.    
     """
-
-
     for i in range(CELLS_PER_DIMENSION):
         for y in range(CELLS_PER_DIMENSION):
             # the cell is alive
@@ -36,12 +33,13 @@ def display_cells():
                 pygame.draw.rect(screen, CELL_COLOR, (i * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
             else:
                 pygame.draw.rect(screen, BG_COLOR, (i * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
+            # draw a border
             pygame.draw.rect(screen, BORDER_COLOR, (i * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE), 1)
             
 def display_heat():
+    """Visualizes how often the given cell has been alive by drawing a transparent red rectangle"""
     for i in range(CELLS_PER_DIMENSION):
         for y in range(CELLS_PER_DIMENSION):
-
             s.set_alpha(min(heat_map[i][y], 254))
             screen.blit(s, (i*CELL_SIZE, y*CELL_SIZE))
 
@@ -69,8 +67,6 @@ def count_live_neighbours(pos1, pos2):
     pos1 -- the x coordinate of the cell (also identifies which list in our cells list the element is stored in)
     pos2 -- the y coordinate of the cell (also identifies the index of its position in its parent list)    
     """
-
-
     alive_count = 0
     for i in range(pos1-1, pos1+2):
         for y in range(pos2-1, pos2+2):
@@ -116,7 +112,6 @@ def invert_cell(event):
 def update_board(): 
     """Updates the status of the board. 
     Iterates over all cells, gets their neighbour count, and determines which cells need inverting before next frame update.
-
     """
     to_invert = []
     alive_neighbours = 0
