@@ -1,5 +1,5 @@
-size = width, height = 600, 600
-CELLS_PER_DIMENSION = 20
+size = width, height = 800, 800
+CELLS_PER_DIMENSION = 40
 CELL_SIZE = height // CELLS_PER_DIMENSION
 
 black = 0, 0, 0

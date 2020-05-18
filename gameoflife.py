@@ -7,13 +7,13 @@ pygame.init()
 def create_grid(cells_in_dimension):
     """Returns a 2d list (lists stored in a list) filled with 1s or 0s.
 
-    If 'running' variable is set to true, approximately half the elements will be assigned to 0, the others to 1 (random() returns a float between 0.0 and 1.0, we multiply it by 10 and compare it to 5))
-    If 'running' is set to false, all elements will be 0
+    If 'RUNNING' variable is set to true, approximately half the elements will be assigned to 0, the others to 1 (random() returns a float between 0.0 and 1.0, we multiply it by 10 and compare it to 5))
+    If 'RUNNING' is set to false, all elements will be 0
 
     Keyword arguments:
     cells_in_dimension -- how many elements we want in each row and column
     """
-    if running:
+    if RUNNING:
         return [[0 if random.random()*10 > 5 else 1 for i in range(cells_in_dimension)] for j in range(cells_in_dimension)]
     return [[0 for i in range(cells_in_dimension)] for j in range(cells_in_dimension)]
 
@@ -52,7 +52,7 @@ def count_live_neighbours(pos1, pos2):
     X X X
     When checking the neighbours of 0, we must access elements that are located at these positions relative to itself:
     top left:       x = -1  , y = -1
-    top midle:      x = 0   , y = -1   
+    top midle:      x = 0   , y = -1
     top right:      x = 1   , y = -1
     middle left:    x = -1  , y = 0
     self:           x = 0   , y = 0
@@ -65,7 +65,7 @@ def count_live_neighbours(pos1, pos2):
 
     Keyword arguments:
     pos1 -- the x coordinate of the cell (also identifies which list in our cells list the element is stored in)
-    pos2 -- the y coordinate of the cell (also identifies the index of its position in its parent list)    
+    pos2 -- the y coordinate of the cell (also identifies the index of its position in its parent list)
     """
     alive_count = 0
     for i in range(pos1-1, pos1+2):
@@ -91,12 +91,9 @@ def invert_cells(to_invert):
         else:
             cells[x][y] = 1
 
-def invert_cell(event):
+def invert_cell():
     """Inverts a cell at the mouses position
     Reads the position of the mouse from the event, calculates which cell belongs to that position, inverts the value of the cell
-
-    Keyword arguments:
-    event -- carries information about the mousepress event - such as the position of the mouse when the event was fired
     """
     mouse_x = pygame.mouse.get_pos()[0]
     mouse_y = pygame.mouse.get_pos()[1]
@@ -109,8 +106,8 @@ def invert_cell(event):
     else:
         cells[cell_x][cell_y] = 1
    
-def update_board(): 
-    """Updates the status of the board. 
+def update_board():
+    """Updates the status of the board.
     Iterates over all cells, gets their neighbour count, and determines which cells need inverting before next frame update.
     """
     to_invert = []
@@ -132,9 +129,9 @@ def update_board():
     invert_cells(to_invert)
 
 """Determines whether or not the rules of the game should apply for the next frame update"""
-running = False 
+RUNNING = False
 """Determines whether or not a custom grid has been designed by the user"""
-custom_grid = False 
+CuSTOM_GRID = False 
 
 screen = pygame.display.set_mode(size)
 cells = create_grid(CELLS_PER_DIMENSION)
@@ -151,22 +148,22 @@ while True:
 
         #if you press a mouse butotn
         if event.type == pygame.MOUSEBUTTONDOWN:
-            custom_grid = True
-            invert_cell(event)
+            CuSTOM_GRID = True
+            invert_cell()
 
         #if you press a key
         if event.type == pygame.KEYDOWN:
 
             #if you pressed R
             if event.key == 114:
-                running = False
-                custom_grid = False
+                RUNNING = False
+                CuSTOM_GRID = False
                 cells = create_grid(CELLS_PER_DIMENSION)
 
             #if you pressed space
             if event.key == 32:
-                running = True
-                if not custom_grid:
+                RUNNING = True
+                if not CuSTOM_GRID:
                     cells = create_grid(CELLS_PER_DIMENSION)
                     if SHOW_HEATMAP:
                         heat_map = create_heat_map(CELLS_PER_DIMENSION)
@@ -181,5 +178,5 @@ while True:
     if SHOW_HEATMAP:
         display_heat()
     pygame.display.flip()
-    if running:   
+    if RUNNING:   
         update_board()
